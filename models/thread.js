@@ -10,10 +10,15 @@ const threadModel = new Schema(
             type: Schema.Types.String,
             required: true
         },
-        created_on: {
-            type: Schema.Types.Date
+        board: {
+            type: Schema.Types.String,
+            required: true
         },
-        bumped_on: {
+        del_password: {
+            type: Schema.Types.String,
+            required: true
+        },
+        created_on: {
             type: Schema.Types.Date
         },
         replies: {
