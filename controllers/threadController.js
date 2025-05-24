@@ -7,7 +7,7 @@ exports.createNewThread = async (req, res) => {
         text: req.body.text,
         del_password: req.body.delete_password
     }
-    await threadService.createNewThread(newThread);
+    const createdThread = await threadService.createNewThread(newThread);
     // redirect to /b/:board
     res.redirect(`/b/${req.params.board}`);
 };

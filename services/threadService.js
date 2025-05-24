@@ -19,5 +19,6 @@ exports.createNewThread = async (newThread) => {
         bumped_on: currentDate,
         replies: []
     });
-    const created = await ThreadModel.create(threadObj);
+    
+    await ThreadModel.create(threadObj);
 };
