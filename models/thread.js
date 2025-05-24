@@ -3,14 +3,11 @@ const Schema = mongoose.Schema;
 
 const threadModel = new Schema(
     {
-        _id: {
-            type: Schema.Types.String
-        },
-        text: {
+        board: {
             type: Schema.Types.String,
             required: true
         },
-        board: {
+        text: {
             type: Schema.Types.String,
             required: true
         },
@@ -18,12 +15,22 @@ const threadModel = new Schema(
             type: Schema.Types.String,
             required: true
         },
+        reported: {
+            type: Schema.Types.Boolean
+        },
         created_on: {
+            type: Schema.Types.Date,
+            required: true
+        },
+        bumped_on: {
             type: Schema.Types.Date
         },
         replies: {
             type: [Schema.Types.String]
         }
+    },
+    {
+        collection: 'threads'
     }
 );
 

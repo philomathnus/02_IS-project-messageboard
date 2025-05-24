@@ -3,6 +3,8 @@ require('dotenv').config();
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
+const mongoose = require("mongoose");
+const helmet = require('helmet');
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
@@ -35,6 +37,13 @@ app.route('/')
 
 //For FCC testing purposes
 fccTestingRoutes(app);
+
+
+// Wait for database to connect, logging an error if there is a problem
+connectToMongoDB().catch((err) => console.log(err));
+async function connectToMongoDB() {
+  await mongoose.connect(process.env.MONGODB_URI);
+}
 
 //Routing for API 
 apiRoutes(app);
