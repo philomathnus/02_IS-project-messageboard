@@ -20,5 +20,13 @@ exports.createNewThread = async (newThread) => {
         replies: []
     });
     
-    await ThreadModel.create(threadObj);
+    return await ThreadModel.create(threadObj);
+};
+
+exports.getBoard = async (boardName) => {
+    const threadsInBoard = await ThreadModel.find({ board: boardName })
+        .sort({ created_on: -1})
+        .limit(10)
+        .exec()
+    return threadsInBoard;
 };

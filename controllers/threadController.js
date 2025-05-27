@@ -8,6 +8,11 @@ exports.createNewThread = async (req, res) => {
         del_password: req.body.delete_password
     }
     const createdThread = await threadService.createNewThread(newThread);
+    res.redirect(`/b/${createdThread.board}/`);
+};
+
+exports.viewBoard = async (req, res) => {
     // redirect to /b/:board
-    res.redirect(`/b/${req.params.board}`);
+    const board = await threadService.getBoard(req.params.board);
+    res.json(board);
 };

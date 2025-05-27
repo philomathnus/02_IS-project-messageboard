@@ -1,11 +1,11 @@
 'use strict';
-const {createNewThread} = require('../controllers/threadController');
+const { createNewThread, viewBoard } = require('../controllers/threadController');
 
 module.exports = function (app) {
-  
   app.route('/api/threads/:board')
-    .post(createNewThread);
-    
-  app.route('/api/replies/:board');
+  .get(viewBoard)
+  .post(createNewThread);
+
+  //app.route('/api/replies/:board');
 
 };
