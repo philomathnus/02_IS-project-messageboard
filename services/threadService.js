@@ -1,3 +1,4 @@
+const thread = require('../models/thread');
 const ThreadModel = require('../models/thread');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -23,10 +24,21 @@ exports.createNewThread = async (newThread) => {
     return await ThreadModel.create(threadObj);
 };
 
+const sortStringDates = (stringDateA, stringDateB) => {
+    const dateA = new Date(stringDateA);//Date.parse(stringDateA);
+    const dateB = new Date(stringDateB);
+    return dateB - dateA;
+};
+
 exports.getBoard = async (boardName) => {
     const threadsInBoard = await ThreadModel.find({ board: boardName })
         .sort({ created_on: -1})
         .limit(10)
         .exec()
-    return threadsInBoard;
+    for (const thread of threadsInBoard) {
+        //keep only the last 3 replies
+        const limitedRelies = thread.replies.slice(0, 3);
+        thread.replies = limitedRelies;
+    }
+    return threadsInBoard.sort((a, b) => sortStringDates(a.created_on, b.created_on));
 };
