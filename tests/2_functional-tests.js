@@ -66,6 +66,7 @@ suite('Functional Tests', function () {
                 } else {
                     assert.equal(res.status, 200, 'Response status should be 200');
                     assert.equal(res.body.length, 10, 'There should be 10 threads in the response');
+                    assert.equal(res.body[0].text, 'thread14');
                     assert.equal(res.body[0].replies.length, 3, 'There should be only 3 replies per thread');
                     done();
                 }
