@@ -83,6 +83,22 @@ suite('Functional Tests', function () {
             });
     });
 
+    test('Deleting a thread with the incorrect password: DELETE request to /api/threads/{board} with an invalid delete_password', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .delete('/api/threads/testboard')
+            .send({
+                thread_id: threadOne._id,
+                delete_password: 'wrong_password'
+            })
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.text, 'incorrect password');
+                done();
+            });
+    });
+
     test('Deleting a thread with the correct password: DELETE request to /api/threads/{board} with a valid delete_password', (done) => {
         chai
             .request(server)
@@ -95,6 +111,21 @@ suite('Functional Tests', function () {
             .end(async (err, res) => {
                 assert.equal(res.status, 200, 'Response status should be 200');
                 assert.equal(res.text, 'success');
+                done();
+            });
+    });
+
+    test('Reporting a thread: PUT request to /api/threads/{board}', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .put('/api/threads/testboard')
+            .send({
+                thread_id: threadOne._id
+            })
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.text, 'reported');
                 done();
             });
     });

@@ -55,6 +55,14 @@ exports.deleteThread = async (threadId, delPassword) => {
         }
     } else {
         return 'Thread not found';
+    }    
+};
+
+exports.reportThread = async (threadId) => {
+    const reportedThread = await ThreadModel.findByIdAndUpdate(threadId, {reported: true}, {new: true});
+    if (reportedThread.reported) {
+        return 'reported';
+    } else {
+        return 'could not report';
     }
-    
 };

@@ -21,3 +21,8 @@ exports.deleteThread = async (req, res) => {
     const response = await threadService.deleteThread(req.body.thread_id, req.body.delete_password);
     res.send(response);
 };
+
+exports.reportThread = async (req, res) => {
+    const response = await threadService.reportThread(req.body.thread_id);
+    res.send(response);
+};
