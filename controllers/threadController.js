@@ -16,3 +16,8 @@ exports.viewBoard = async (req, res) => {
     const board = await threadService.getBoard(req.params.board);
     res.json(board);
 };
+
+exports.deleteThread = async (req, res) => {
+    const response = await threadService.deleteThread(req.body.thread_id, req.body.delete_password);
+    res.send(response);
+};

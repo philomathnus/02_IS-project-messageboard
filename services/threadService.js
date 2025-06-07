@@ -42,3 +42,14 @@ exports.getBoard = async (boardName) => {
     }
     return threadsInBoard.sort((a, b) => sortStringDates(a.created_on, b.created_on));
 };
+
+exports.deleteThread = async (threadId, delPassword) => {
+    const response = await ThreadModel.deleteOne({ _id: threadId});
+    console.log(response);
+    if (response && response.deletedCount === 1) {
+        return 'success';
+    } else {
+        return 'incorrect password';
+    }
+    
+};

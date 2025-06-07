@@ -4,6 +4,7 @@ const assert = chai.assert;
 const server = require('../server');
 const { beforeEach } = require('mocha');
 const ThreadModel = require('../models/thread');
+const { ObjectId } = require('mongoose');
 
 chai.use(chaiHttp);
 
@@ -24,13 +25,20 @@ const threads = [
     new ThreadModel({ board: 'testboard', text: 'thread14', del_password: 'topsecret', created_on: new Date('1995-12-30T03:24:00'), bumped_on: new Date('1995-12-30T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] })
 ];
 
+let threadOne;
+
 suite('Functional Tests', function () {
     beforeEach((done) => {
         ThreadModel.deleteMany({})
             .then(() => {
                 ThreadModel.insertMany(threads)
                     .then(() => {
-                        done();
+                        ThreadModel.findOne({text: 'thread1'})
+                        .then((foundThreadData) => {
+                            threadOne = foundThreadData;
+                            done();
+                        })
+                        .catch(err => console.log(err));
                     })
                     .catch(err => console.log(err));
             })
@@ -55,7 +63,7 @@ suite('Functional Tests', function () {
             });
     });
 
-     test('Viewing the 10 most recent threads with 3 replies each: GET request to /api/threads/{board}', (done) => {
+    test('Viewing the 10 most recent threads with 3 replies each: GET request to /api/threads/{board}', (done) => {
         chai
             .request(server)
             .keepOpen()
@@ -73,21 +81,19 @@ suite('Functional Tests', function () {
             });
     });
 
-/*     test('Deleting a thread with the correct password: DELETE request to /api/threads/{board} with a valid delete_password', (done) => {
+    test('Deleting a thread with the correct password: DELETE request to /api/threads/{board} with a valid delete_password', (done) => {
         chai
             .request(server)
             .keepOpen()
-            .put('/api/threads/testboard')
+            .delete('/api/threads/testboard')
             .send({
-                thread_id: 'Test new thread creation',
-                delete_password: 'topsecret'
+                thread_id: threadOne._id,
+                delete_password: threadOne.del_password
             })
             .end(async (err, res) => {
                 assert.equal(res.status, 200, 'Response status should be 200');
-                const threadFromDB = await ThreadModel.findOne({ board: 'newtestboard' });
-                assert.exists(threadFromDB);
-                assert.equal(threadFromDB.text, 'Test new thread creation');
+                assert.equal(res.text, 'success');
                 done();
             });
-    }); */
+    });
 });
