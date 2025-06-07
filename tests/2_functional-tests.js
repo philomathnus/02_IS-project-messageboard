@@ -4,25 +4,27 @@ const assert = chai.assert;
 const server = require('../server');
 const { beforeEach } = require('mocha');
 const ThreadModel = require('../models/thread');
-const { ObjectId } = require('mongoose');
+const {encryptPassword} = require('../services/threadService');
 
 chai.use(chaiHttp);
 
+const hashedPassword = encryptPassword('topsecret');
+
 const threads = [
-    new ThreadModel({ board: 'testboard', text: 'thread1', del_password: 'topsecret', created_on: new Date('1995-12-17T03:24:00'), bumped_on: new Date('1995-12-17T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread2', del_password: 'topsecret', created_on: new Date('1995-12-18T03:24:00'), bumped_on: new Date('1995-12-18T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread3', del_password: 'topsecret', created_on: new Date('1995-12-19T03:24:00'), bumped_on: new Date('1995-12-19T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread4', del_password: 'topsecret', created_on: new Date('1995-12-20T03:24:00'), bumped_on: new Date('1995-12-20T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread5', del_password: 'topsecret', created_on: new Date('1995-12-21T03:24:00'), bumped_on: new Date('1995-12-21T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread6', del_password: 'topsecret', created_on: new Date('1995-12-22T03:24:00'), bumped_on: new Date('1995-12-22T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread7', del_password: 'topsecret', created_on: new Date('1995-12-23T03:24:00'), bumped_on: new Date('1995-12-23T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread8', del_password: 'topsecret', created_on: new Date('1995-12-24T03:24:00'), bumped_on: new Date('1995-12-24T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread9', del_password: 'topsecret', created_on: new Date('1995-12-25T03:24:00'), bumped_on: new Date('1995-12-25T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread10', del_password: 'topsecret', created_on: new Date('1995-12-26T03:24:00'), bumped_on: new Date('1995-12-26T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread11', del_password: 'topsecret', created_on: new Date('1995-12-27T03:24:00'), bumped_on: new Date('1995-12-27T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread12', del_password: 'topsecret', created_on: new Date('1995-12-28T03:24:00'), bumped_on: new Date('1995-12-28T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread13', del_password: 'topsecret', created_on: new Date('1995-12-29T03:24:00'), bumped_on: new Date('1995-12-29T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
-    new ThreadModel({ board: 'testboard', text: 'thread14', del_password: 'topsecret', created_on: new Date('1995-12-30T03:24:00'), bumped_on: new Date('1995-12-30T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] })
+    new ThreadModel({ board: 'testboard', text: 'thread1', del_password: hashedPassword, created_on: new Date('1995-12-17T03:24:00'), bumped_on: new Date('1995-12-17T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread2', del_password: hashedPassword, created_on: new Date('1995-12-18T03:24:00'), bumped_on: new Date('1995-12-18T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread3', del_password: hashedPassword, created_on: new Date('1995-12-19T03:24:00'), bumped_on: new Date('1995-12-19T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread4', del_password: hashedPassword, created_on: new Date('1995-12-20T03:24:00'), bumped_on: new Date('1995-12-20T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread5', del_password: hashedPassword, created_on: new Date('1995-12-21T03:24:00'), bumped_on: new Date('1995-12-21T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread6', del_password: hashedPassword, created_on: new Date('1995-12-22T03:24:00'), bumped_on: new Date('1995-12-22T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread7', del_password: hashedPassword, created_on: new Date('1995-12-23T03:24:00'), bumped_on: new Date('1995-12-23T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread8', del_password: hashedPassword, created_on: new Date('1995-12-24T03:24:00'), bumped_on: new Date('1995-12-24T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread9', del_password: hashedPassword, created_on: new Date('1995-12-25T03:24:00'), bumped_on: new Date('1995-12-25T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread10', del_password: hashedPassword, created_on: new Date('1995-12-26T03:24:00'), bumped_on: new Date('1995-12-26T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread11', del_password: hashedPassword, created_on: new Date('1995-12-27T03:24:00'), bumped_on: new Date('1995-12-27T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread12', del_password: hashedPassword, created_on: new Date('1995-12-28T03:24:00'), bumped_on: new Date('1995-12-28T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread13', del_password: hashedPassword, created_on: new Date('1995-12-29T03:24:00'), bumped_on: new Date('1995-12-29T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] }),
+    new ThreadModel({ board: 'testboard', text: 'thread14', del_password: hashedPassword, created_on: new Date('1995-12-30T03:24:00'), bumped_on: new Date('1995-12-30T03:24:00'), replies: ['first reply', 'second reply', 'third reply', 'forth reply'] })
 ];
 
 let threadOne;
@@ -88,7 +90,7 @@ suite('Functional Tests', function () {
             .delete('/api/threads/testboard')
             .send({
                 thread_id: threadOne._id,
-                delete_password: threadOne.del_password
+                delete_password: 'topsecret'
             })
             .end(async (err, res) => {
                 assert.equal(res.status, 200, 'Response status should be 200');

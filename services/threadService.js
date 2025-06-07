@@ -3,7 +3,7 @@ const ThreadModel = require('../models/thread');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-const encryptPassword = (plainTextPassword) => {
+exports.encryptPassword = (plainTextPassword) => {
     return bcrypt.hashSync(plainTextPassword, saltRounds);
 };
 
@@ -15,12 +15,11 @@ exports.createNewThread = async (newThread) => {
     const currentDate = new Date();
     const threadObj = new ThreadModel({
         ...newThread,
-        del_password: encryptPassword(newThread.del_password),
+        del_password: this.encryptPassword(newThread.del_password),
         created_on: currentDate,
         bumped_on: currentDate,
         replies: []
     });
-    
     return await ThreadModel.create(threadObj);
 };
 
@@ -44,12 +43,18 @@ exports.getBoard = async (boardName) => {
 };
 
 exports.deleteThread = async (threadId, delPassword) => {
-    const response = await ThreadModel.deleteOne({ _id: threadId});
-    console.log(response);
-    if (response && response.deletedCount === 1) {
-        return 'success';
+    const threadToDelete = await ThreadModel.findById(threadId);
+    if (threadToDelete) {
+        //check password and delete if correct
+        if (comparePassword(delPassword, threadToDelete.del_password)) {
+            //password correct, proceed to delete
+            await ThreadModel.deleteOne({ _id: threadId});
+            return 'success';
+        } else {
+            return 'incorrect password';
+        }
     } else {
-        return 'incorrect password';
+        return 'Thread not found';
     }
     
 };
