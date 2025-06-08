@@ -16,7 +16,8 @@ const threadModel = new Schema(
             required: true
         },
         reported: {
-            type: Schema.Types.Boolean
+            type: Schema.Types.Boolean,
+            detault: false
         },
         created_on: {
             type: Schema.Types.Date,

@@ -34,7 +34,7 @@ exports.getBoard = async (boardName) => {
     const threadsInBoard = await ThreadModel.find({ board: boardName })
         .sort({ bumped_on: -1 })
         .limit(10)
-        .select('-delete_password -reported')
+        .select('-del_password -reported')
         .exec();
     for (const thread of threadsInBoard) {
         //keep only the last 3 replies
@@ -71,12 +71,12 @@ exports.reportThread = async (threadId) => {
 
 exports.addReply = async (threadId, text, deletePassword) => {
     const newReply = new Reply(text, this.encryptPassword(deletePassword));
-    const updatedThread = await ThreadModel.findByIdAndUpdate({ _id: threadId }, { $push: { replies: newReply }, bumped_on: new Date() }, { new: true }).select('-delete_password -reported');
+    const updatedThread = await ThreadModel.findByIdAndUpdate({ _id: threadId }, { $push: { replies: newReply }, bumped_on: new Date() }, { new: true }).select('-del_password -reported');
     return updatedThread;
 };
 
 exports.getThread = async (threadId) => {
-    const thread = await ThreadModel.findById({ _id: threadId }).select('-delete_password -reported');
+    const thread = await ThreadModel.findById({ _id: threadId }).select('-del_password -reported');
     return thread;
 };
 
