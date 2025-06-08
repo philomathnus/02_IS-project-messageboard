@@ -89,3 +89,13 @@ exports.deleteReply = async (threadId, replyId, deletePassword) => {
         return 'incorrect password';
     }
 };
+
+exports.reportReply = async (threadId, replyId) => {
+    const reportedThread = await ThreadModel.findOneAndUpdate({_id: threadId, 'replies._id': replyId}, {$set: {'replies.$.reported':  true}}, {new: true});
+    const reply = reportedThread.replies.filter(reply => reply._id === replyId)[0];
+    if (reply.reported) {
+        return 'reported';
+    } else {
+        return 'could not report';
+    }
+};

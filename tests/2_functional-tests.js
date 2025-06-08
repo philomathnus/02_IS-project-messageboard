@@ -207,4 +207,20 @@ suite('Functional Tests', function () {
                 done();
             });
     });
+
+    test('Reporting a reply: PUT request to /api/replies/{board}', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .put('/api/replies/testboard')
+            .send({
+                thread_id: threadOne._id,
+                reply_id: threadOne.replies[0]._id
+            })
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.text, 'reported');
+                done();
+            });
+    });
 });
