@@ -26,7 +26,8 @@ const threadModel = new Schema(
             type: Schema.Types.Date
         },
         replies: {
-            type: [Schema.Types.String]
+            type: Schema.Types.Array,
+            default: []
         }
     },
     {

@@ -1,3 +1,4 @@
+const Reply = require('../models/reply');
 const thread = require('../models/thread');
 const ThreadModel = require('../models/thread');
 const bcrypt = require('bcrypt');
@@ -66,3 +67,10 @@ exports.reportThread = async (threadId) => {
         return 'could not report';
     }
 };
+
+exports.addReply = async (threadId, text, deletePassword) => {
+    const currentDate = new Date();
+    const newReply = new Reply(text, this.encryptPassword(deletePassword));
+    const updatedThread = await ThreadModel.findByIdAndUpdate({_id: threadId}, {$push: {replies: newReply}, bumped_on: new Date()}, {new: true});
+    return updatedThread;
+}

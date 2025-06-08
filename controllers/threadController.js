@@ -26,3 +26,9 @@ exports.reportThread = async (req, res) => {
     const response = await threadService.reportThread(req.body.thread_id);
     res.send(response);
 };
+
+
+exports.addReply = async (req, res) => {
+    const updatedThread = await threadService.addReply(req.body.thread_id, req.body.text, req.body.delete_password);
+    res.redirect(`/b/${updatedThread.board}/`);
+};

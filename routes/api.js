@@ -1,5 +1,6 @@
 'use strict';
-const { createNewThread, viewBoard, deleteThread, reportThread } = require('../controllers/threadController');
+const { createNewThread, viewBoard, deleteThread, reportThread, addReply } = require('../controllers/threadController');
+
 
 module.exports = function (app) {
   app.route('/api/threads/:board')
@@ -8,6 +9,7 @@ module.exports = function (app) {
   .delete(deleteThread)
   .put(reportThread);
 
-  //app.route('/api/replies/:board');
+  app.route('/api/replies/:board')
+  .post(addReply);
 
 };
