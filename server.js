@@ -16,7 +16,7 @@ app.use(helmet({
   xFrameOptions: { action: "sameorigin" },
   xDnsPrefetchControl: { allow: false },
   referrerPolicy: {
-    policy: ["origin"]
+    policy: ["same-origin"]
   }
 }));
 
