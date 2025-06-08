@@ -32,7 +32,7 @@ const sortStringDates = (stringDateA, stringDateB) => {
 
 exports.getBoard = async (boardName) => {
     const threadsInBoard = await ThreadModel.find({ board: boardName })
-        .sort({ created_on: -1})
+        .sort({ created_on: -1 })
         .limit(10)
         .exec()
     for (const thread of threadsInBoard) {
@@ -49,18 +49,18 @@ exports.deleteThread = async (threadId, delPassword) => {
         //check password and delete if correct
         if (comparePassword(delPassword, threadToDelete.del_password)) {
             //password correct, proceed to delete
-            await ThreadModel.deleteOne({ _id: threadId});
+            await ThreadModel.deleteOne({ _id: threadId });
             return 'success';
         } else {
             return 'incorrect password';
         }
     } else {
         return 'Thread not found';
-    }    
+    }
 };
 
 exports.reportThread = async (threadId) => {
-    const reportedThread = await ThreadModel.findByIdAndUpdate(threadId, {reported: true}, {new: true});
+    const reportedThread = await ThreadModel.findByIdAndUpdate(threadId, { reported: true }, { new: true });
     if (reportedThread.reported) {
         return 'reported';
     } else {
@@ -71,6 +71,11 @@ exports.reportThread = async (threadId) => {
 exports.addReply = async (threadId, text, deletePassword) => {
     const currentDate = new Date();
     const newReply = new Reply(text, this.encryptPassword(deletePassword));
-    const updatedThread = await ThreadModel.findByIdAndUpdate({_id: threadId}, {$push: {replies: newReply}, bumped_on: new Date()}, {new: true});
+    const updatedThread = await ThreadModel.findByIdAndUpdate({ _id: threadId }, { $push: { replies: newReply }, bumped_on: new Date() }, { new: true });
     return updatedThread;
+}
+
+exports.getThread = async (threadId) => {
+    const thread = await ThreadModel.findById({ _id: threadId });
+    return thread;
 }

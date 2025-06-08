@@ -158,4 +158,18 @@ suite('Functional Tests', function () {
             });
     });
 
+    test('Viewing a single thread with all replies: GET request to /api/replies/{board}', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .get('/api/replies/testboard')
+            .query({thread_id: threadOne._id.toString()})
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.body._id, threadOne._id, 'Response should contain thread one');
+                assert.equal(res.body.replies.length, 4, 'Response should contain thread one with all four replies');
+                done();
+            });
+    });
+
 });

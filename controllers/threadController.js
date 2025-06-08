@@ -12,7 +12,6 @@ exports.createNewThread = async (req, res) => {
 };
 
 exports.viewBoard = async (req, res) => {
-    // redirect to /b/:board
     const board = await threadService.getBoard(req.params.board);
     res.json(board);
 };
@@ -30,5 +29,10 @@ exports.reportThread = async (req, res) => {
 
 exports.addReply = async (req, res) => {
     const updatedThread = await threadService.addReply(req.body.thread_id, req.body.text, req.body.delete_password);
-    res.redirect(`/b/${updatedThread.board}/`);
+    res.redirect(`/b/${updatedThread.board}/${req.body.thread_id}`);
 };
+
+exports.getThread = async (req, res) => {
+    const thread = await threadService.getThread(req.query.thread_id);
+    res.json(thread);
+}

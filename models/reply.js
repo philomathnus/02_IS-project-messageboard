@@ -7,10 +7,10 @@ class Reply {
     }
 
     constructor(text, deletePassword, reported = false) {
-        this.id = this.#generateID();
+        this._id = this.#generateID();
         this.text = text;
-        this.deletePassword = deletePassword;
-        this.createdOn = new Date();
+        this.delete_password = deletePassword;
+        this.created_on = new Date();
         this.reported = reported;
     }
 
