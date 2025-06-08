@@ -35,4 +35,9 @@ exports.addReply = async (req, res) => {
 exports.getThread = async (req, res) => {
     const thread = await threadService.getThread(req.query.thread_id);
     res.json(thread);
-}
+};
+
+exports.deleteReply = async (req, res) => {
+    const response = await threadService.deleteReply(req.body.thread_id, req.body.reply_id, req.body.delete_password);
+    res.send(response);
+};

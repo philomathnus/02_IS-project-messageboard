@@ -69,13 +69,23 @@ exports.reportThread = async (threadId) => {
 };
 
 exports.addReply = async (threadId, text, deletePassword) => {
-    const currentDate = new Date();
     const newReply = new Reply(text, this.encryptPassword(deletePassword));
     const updatedThread = await ThreadModel.findByIdAndUpdate({ _id: threadId }, { $push: { replies: newReply }, bumped_on: new Date() }, { new: true });
     return updatedThread;
-}
+};
 
 exports.getThread = async (threadId) => {
     const thread = await ThreadModel.findById({ _id: threadId });
     return thread;
-}
+};
+
+exports.deleteReply = async (threadId, replyId, deletePassword) => {
+    const thread = await ThreadModel.findById({_id: threadId});
+    const reply = thread.replies.filter(reply => reply._id === replyId)[0];
+    if (comparePassword(deletePassword, reply.delete_password)) {
+        await ThreadModel.updateOne({_id: threadId, 'replies._id': reply._id}, {$set: {'replies.$.text':  '[deleted]'}});
+        return 'success';
+    } else {
+        return 'incorrect password';
+    }
+};

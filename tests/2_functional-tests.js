@@ -172,4 +172,39 @@ suite('Functional Tests', function () {
             });
     });
 
+    test('Deleting a reply with the incorrect password: DELETE request to /api/replies/{board} with an invalid delete_password', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .delete('/api/replies/testboard')
+            .send({
+                thread_id: threadOne._id,
+                reply_id: threadOne.replies[0]._id,
+                delete_password: 'incorrect password'
+            })
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.text, 'incorrect password');
+                done();
+            });
+    });
+
+    test('Deleting a reply with the correct password: DELETE request to /api/replies/{board} with a valid delete_password', (done) => {
+        chai
+            .request(server)
+            .keepOpen()
+            .delete('/api/replies/testboard')
+            .send({
+                thread_id: threadOne._id,
+                reply_id: threadOne.replies[0]._id,
+                delete_password: 'del_reply'
+            })
+            .end(async (err, res) => {
+                assert.equal(res.status, 200, 'Response status should be 200');
+                assert.equal(res.text, 'success');
+                const updatedThread = await ThreadModel.findById(threadOne._id);
+                assert.equal(updatedThread.replies[0].text, '[deleted]', 'Text of deleted reply should be set to [deleted]');
+                done();
+            });
+    });
 });
