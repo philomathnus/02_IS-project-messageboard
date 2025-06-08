@@ -41,7 +41,7 @@ exports.getBoard = async (boardName) => {
         const limitedRelies = thread.replies.slice(0, 3);
         thread.replies = limitedRelies;
     }
-    return threadsInBoard.sort((a, b) => sortStringDates(a.created_on, b.created_on));
+    return threadsInBoard.sort((a, b) => sortStringDates(a.bumped_on, b.bumped_on));
 };
 
 exports.deleteThread = async (threadId, delPassword) => {
